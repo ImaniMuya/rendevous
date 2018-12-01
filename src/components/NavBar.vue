@@ -1,6 +1,22 @@
 <template>
     <v-toolbar dark color="primary">
-        <v-toolbar-side-icon></v-toolbar-side-icon>
+        <v-menu offset-y>
+            <v-btn flat slot="activator">
+                <v-toolbar-side-icon></v-toolbar-side-icon>
+            </v-btn>
+
+            <v-list>
+                <v-list-tile v-bind:to="{ name: 'schedule' }">
+                    <v-list-tile-title>Schedule</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile v-bind:to="{ name: 'teams' }">
+                    <v-list-tile-title>Teams</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile v-bind:to="{ name: 'notifications' }">
+                    <v-list-tile-title>Notifications</v-list-tile-title>
+                </v-list-tile>
+            </v-list>
+        </v-menu>
 
         <router-link v-bind:to="{ name: 'home-page' }">
             <v-toolbar-title class="white--text">
@@ -14,11 +30,11 @@
 
         <v-btn flat v-bind:to="{ name: 'reset-password' }">Reset Password</v-btn>
        
-        <v-btn flat v-bind:to="{ name: 'Notifications' }">Notifications</v-btn>
+        <v-btn flat v-bind:to="{ name: 'notifications' }">Notifications</v-btn>
        
-        <v-btn flat v-bind:to="{ name: 'Schedule' }">Schedule</v-btn>
+        <v-btn flat v-bind:to="{ name: 'schedule' }">Schedule</v-btn>
        
-        <v-btn flat v-bind:to="{ name: 'Teams' }">Teams</v-btn>
+        <v-btn flat v-bind:to="{ name: 'teams' }">Teams</v-btn>
 
         <v-menu offset-y>
             <v-btn flat slot="activator">
