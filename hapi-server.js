@@ -115,6 +115,71 @@ async function init() {
                     index: true
                 }
             }
+        },
+        //adding member 
+        {
+            method: 'PUT',
+            path: '/api/member',
+            config: {
+                description: 'add member',
+                validate: {
+                    params: {
+                        member_id: Joi.number().integer().min(0)
+                    },
+                    payload: {
+                        fname: Joi.string().min(1).required(),
+                        lname: Joi.string().min(1).required(),
+                        password: Joi.string().min(1).required(),
+                        email: Joi.string().min(1).required(),
+                    }
+                }
+            },
+            handler: async (request, h) => {
+            }
+        },
+        //create commitment
+        {
+            method: 'PUT',
+            path: '/api/commitment',
+            config: {
+                description: 'add commitment',
+                validate: {
+                    params: {
+                        commitment_id: Joi.number().integer().min(0)
+                    },
+                    payload: {
+                        name: Joi.string().min(1).required(),
+                        description: Joi.string().min(1),
+                        location: Joi.string().min(1).required(),
+                        startDateTime: Joi.string().min(1).required(),
+                        endDateTime: Joi.string().min(1).required(),
+                        numWeeks: Joi.string().min(1).required(),
+                    }
+                }
+            },
+            handler: async (request, h) => {
+            }
+        },
+        //create activity
+        {
+            method: 'PUT',
+            path: '/api/activity',
+            config: {
+                description: 'add activity',
+                validate: {
+                    params: {
+                        activity_id: Joi.number().integer().min(0)
+                    },
+                    payload: {
+                        name: Joi.string().min(1).required(),
+                        description: Joi.string().min(1),
+                        location: Joi.string().min(1).required(),
+                        duration: Joi.string().min(1).required(),
+                    }
+                }
+            },
+            handler: async (request, h) => {
+            }
         }
     ]);
 
