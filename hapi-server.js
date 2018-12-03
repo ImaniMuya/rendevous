@@ -109,12 +109,14 @@ async function init() {
             handler: async (request, h) => {
                 let resultSet = await knex("accounts")
                     .select()
-                    .where("email", request.payload.email);
-                if (resultSet.length > 0) {
+                    .where("email", request.payload.email)
+                    .where("password",request.payload.password);
+                if (resultSet.length === 1) {
+                    //set login variable to be you. 
                     return {
                         ok: true,
                         msge: `Welcome '${request.payload.email}' you have logged in`
-                    };
+                    }
                 } else {
                     return {
                         ok: false,
@@ -125,16 +127,16 @@ async function init() {
                 };
             }
         },
-        {
-            method: "GET",
-            path: "/api/accounts",
-            config: {
-                description: "Retrieve all accounts"
-            },
-            handler: async (request, h) => {
-                return knex("accounts").select("email", "firstname", "lastname");
-            }
-        },
+        // {
+        //     method: "GET",
+        //     path: "/api/accounts",
+        //     config: {
+        //         description: "Retrieve all accounts"
+        //     },
+        //     handler: async (request, h) => {
+        //         return knex("accounts").select("email", "firstname", "lastname");
+        //     }
+        // },
         {
             method: "GET",
             path: "/api/teams",

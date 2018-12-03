@@ -56,7 +56,7 @@ import Instructions from "../components/Instructions.vue";
 import axios from "axios";
 
 export default {
-    name: "SignUpPage",
+    name: "LoginPage",
     components: {
         Instructions
     },

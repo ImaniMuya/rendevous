@@ -8,7 +8,7 @@
                 v-model="team"
                 v-bind:rules="rules.team"
                 error-count="10"
-                type="password"
+                type="text"
                 label="Team Name"
                 required
             >
