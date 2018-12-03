@@ -15,26 +15,23 @@
                 <v-list-tile v-bind:to="{ name: 'notifications' }">
                     <v-list-tile-title>Notifications</v-list-tile-title>
                 </v-list-tile>
+                <v-list-tile v-bind:to="{ name: 'reset-password' }">
+                    <v-list-tile-title>Reset-Password</v-list-tile-title>
+                </v-list-tile>
             </v-list>
         </v-menu>
 
         <router-link v-bind:to="{ name: 'home-page' }">
             <v-toolbar-title class="white--text">
-                Single Page App
+                Tous Les Memes
             </v-toolbar-title>
         </router-link>
 
         <v-spacer></v-spacer>
 
-        <v-btn flat v-bind:to="{ name: 'sign-up' }">Sign Up</v-btn>
+        <v-btn flat v-bind:to="{ name: 'login' }">Login</v-btn>
 
-        <v-btn flat v-bind:to="{ name: 'reset-password' }">Reset Password</v-btn>
        
-        <v-btn flat v-bind:to="{ name: 'notifications' }">Notifications</v-btn>
-       
-        <v-btn flat v-bind:to="{ name: 'schedule' }">Schedule</v-btn>
-       
-        <v-btn flat v-bind:to="{ name: 'teams' }">Teams</v-btn>
 
         <v-menu offset-y>
             <v-btn flat slot="activator">

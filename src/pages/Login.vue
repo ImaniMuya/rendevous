@@ -1,21 +1,31 @@
 <template>
     <div>
-        <h4 class="display-1">Teams</h4>
+        <h4 class="display-1">Login</h4>
 
-        <instructions details="Manage your Teams here!" />
+        <instructions details="Login to our nifty site." />
 
+        <v-form v-model="valid">
             <v-text-field
-                v-model="team"
-                v-bind:rules="rules.team"
+                v-model="email"
+                v-bind:rules="rules.email"
+                error-count="10"
+                type="email"
+                label="Your email address"
+            >
+            </v-text-field>
+            <v-text-field
+                v-model="password"
+                v-bind:rules="rules.password"
                 error-count="10"
                 type="password"
-                label="Team Name"
+                label="Non-trivial password"
                 required
             >
             </v-text-field>
             <v-btn v-bind:disabled="!valid" v-on:click="handleSubmit"
-                >Create Team
+                >Sign Up
             </v-btn>
+        </v-form>
 
         <div class="text-xs-center">
             <v-dialog v-model="dialogVisible" width="500">
@@ -37,6 +47,7 @@
                 </v-card>
             </v-dialog>
         </div>
+        <v-btn flat v-bind:to="{ name: 'sign-up' }">I don't have an account</v-btn>
     </div>
 </template>
 
@@ -63,8 +74,14 @@ export default {
                 required: [
                     val => val.length > 0 || 'Required'
                 ],
-                team: [
-                    val => /^(?![A\s])/.test(val) || "Invalid Team Name"
+                email: [
+                    val => /^\w+@\w+\.\w{2,}$/.test(val) || "Invalid e-mail"
+                ],
+                password: [
+                    val => /[A-Z]/.test(val) || "Need upper case letter",
+                    val => /[a-z]/.test(val) || "Need lower case letter",
+                    val => /\d/.test(val) || "Need digit",
+                    val => val.length >= 8 || "Minimum 8 characters"
                 ]
             }
         };
@@ -72,8 +89,9 @@ export default {
     methods: {
         handleSubmit: function() {
             axios
-                .get("/api/teams", {
-                    team: this.team,
+                .get("/api/accounts", {
+                    email: this.email,
+                    password: this.password,
                 })
                 .then(result => {
                     if (result.status === 200) {

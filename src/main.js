@@ -10,6 +10,7 @@ import "material-design-icons-iconfont/dist/material-design-icons.css";
 
 import Home from "./pages/Home.vue";
 import SignUp from "./pages/SignUp.vue";
+import Login from "./pages/Login.vue";
 import ResetPassword from "./pages/ResetPassword.vue";
 import Accounts from "./pages/Accounts.vue";
 import Notifications from "./pages/Notifications.vue";
@@ -24,6 +25,7 @@ const router = new VueRouter({
     routes: [
         {name: "home-page", path: "/", component: Home},
         {name: "sign-up", path: "/sign-up", component: SignUp},
+        {name: "login", path: "/login", component: Login},
         {name: "reset-password", path: "/reset-password", component: ResetPassword},
         {name: "accounts", path: "/accounts", component: Accounts},
         {name: "notifications", path: "/notification", component: Notifications},

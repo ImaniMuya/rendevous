@@ -96,10 +96,95 @@ async function init() {
             method: "GET",
             path: "/api/accounts",
             config: {
+                description: "Login to existing account",
+                validate: {
+                    payload: {
+                        email: Joi.string()
+                            .email()
+                            .required(),
+                        password: Joi.string().required()
+                    }
+                }
+            },
+            handler: async (request, h) => {
+                let resultSet = await knex("accounts")
+                    .select()
+                    .where("email", request.payload.email);
+                if (resultSet.length > 0) {
+                    return {
+                        ok: true,
+                        msge: `Welcome '${request.payload.email}' you have logged in`
+                    };
+                } else {
+                    return {
+                        ok: false,
+                        msge: `Couldn't find account '${
+                            request.payload.email
+                        }'. Do you need to create an account?`
+                    };
+                };
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/accounts",
+            config: {
                 description: "Retrieve all accounts"
             },
             handler: async (request, h) => {
                 return knex("accounts").select("email", "firstname", "lastname");
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/teams",
+            config: {
+                description: "Retrieve all teams"
+            },
+            handler: async (request, h) => {
+                return knex("accounts").select("name");
+            }
+        },
+        {
+            method: "POST",
+            path: "/api/teams",
+            config: {
+                description: "Create a Team",
+                validate: {
+                    payload: {
+                        team: Joi.string().required(),
+                    }
+                }
+            },
+            handler: async (request, h) => {
+                let resultSet = await knex("teams")
+                    .select()
+                    .where("teams", request.payload.team);
+                if (resultSet.length > 0) {
+                    return {
+                        ok: false,
+                        msge: `The team '${request.payload.email}' is already created, would you like to join?`
+                    };
+                }
+
+                let result = await knex("teams").insert({
+                    team: request.payload.team,
+                    //insert yourself as member??
+                });
+
+                if (result.rowCount === 1) {
+                    return {
+                        ok: true,
+                        msge: `Created team '${request.payload.team}'`
+                    };
+                } else {
+                    return {
+                        ok: false,
+                        msge: `Couldn't add '${
+                            request.payload.team
+                        }' to the database`
+                    };
+                }
             }
         },
         {
@@ -115,72 +200,72 @@ async function init() {
                     index: true
                 }
             }
-        },
-        //adding member 
-        {
-            method: 'PUT',
-            path: '/api/member',
-            config: {
-                description: 'add member',
-                validate: {
-                    params: {
-                        member_id: Joi.number().integer().min(0)
-                    },
-                    payload: {
-                        fname: Joi.string().min(1).required(),
-                        lname: Joi.string().min(1).required(),
-                        password: Joi.string().min(1).required(),
-                        email: Joi.string().min(1).required(),
-                    }
-                }
-            },
-            handler: async (request, h) => {
-            }
-        },
-        //create commitment
-        {
-            method: 'PUT',
-            path: '/api/commitment',
-            config: {
-                description: 'add commitment',
-                validate: {
-                    params: {
-                        commitment_id: Joi.number().integer().min(0)
-                    },
-                    payload: {
-                        name: Joi.string().min(1).required(),
-                        description: Joi.string().min(1),
-                        location: Joi.string().min(1).required(),
-                        startDateTime: Joi.string().min(1).required(),
-                        endDateTime: Joi.string().min(1).required(),
-                        numWeeks: Joi.string().min(1).required(),
-                    }
-                }
-            },
-            handler: async (request, h) => {
-            }
-        },
-        //create activity
-        {
-            method: 'PUT',
-            path: '/api/activity',
-            config: {
-                description: 'add activity',
-                validate: {
-                    params: {
-                        activity_id: Joi.number().integer().min(0)
-                    },
-                    payload: {
-                        name: Joi.string().min(1).required(),
-                        description: Joi.string().min(1),
-                        location: Joi.string().min(1).required(),
-                        duration: Joi.string().min(1).required(),
-                    }
-                }
-            },
-            handler: async (request, h) => {
-            }
         }
+        // //adding member 
+        // {
+        //     method: 'PUT',
+        //     path: '/api/member',
+        //     config: {
+        //         description: 'add member',
+        //         validate: {
+        //             params: {
+        //                 member_id: Joi.number().integer().min(0)
+        //             },
+        //             payload: {
+        //                 fname: Joi.string().min(1).required(),
+        //                 lname: Joi.string().min(1).required(),
+        //                 password: Joi.string().min(1).required(),
+        //                 email: Joi.string().min(1).required(),
+        //             }
+        //         }
+        //     },
+        //     handler: async (request, h) => {
+        //     }
+        // },
+        // //create commitment
+        // {
+        //     method: 'PUT',
+        //     path: '/api/commitment',
+        //     config: {
+        //         description: 'add commitment',
+        //         validate: {
+        //             params: {
+        //                 commitment_id: Joi.number().integer().min(0)
+        //             },
+        //             payload: {
+        //                 name: Joi.string().min(1).required(),
+        //                 description: Joi.string().min(1),
+        //                 location: Joi.string().min(1).required(),
+        //                 startDateTime: Joi.string().min(1).required(),
+        //                 endDateTime: Joi.string().min(1).required(),
+        //                 numWeeks: Joi.string().min(1).required(),
+        //             }
+        //         }
+        //     },
+        //     handler: async (request, h) => {
+        //     }
+        // },
+        // //create activity
+        // {
+        //     method: 'PUT',
+        //     path: '/api/activity',
+        //     config: {
+        //         description: 'add activity',
+        //         validate: {
+        //             params: {
+        //                 activity_id: Joi.number().integer().min(0)
+        //             },
+        //             payload: {
+        //                 name: Joi.string().min(1).required(),
+        //                 description: Joi.string().min(1),
+        //                 location: Joi.string().min(1).required(),
+        //                 duration: Joi.string().min(1).required(),
+        //             }
+        //         }
+        //     },
+        //     handler: async (request, h) => {
+        //     }
+        // }
     ]);
 
     // Start the server.
