@@ -23,23 +23,35 @@
             <v-btn v-on:click="handleSubmit"
                 >Create Team
             </v-btn>
+            <!-- change to show Teams that are in the database -->
+            <v-btn v-on:click="showTeams"
+                >View Teams
+            </v-btn>
 
         <div class="text-xs-center">
             <v-dialog v-model="dialogVisible" width="500">
+            
                 <v-card>
                     <v-card-title class="headline grey lighten-2" primary-title>
-                        {{ dialogHeader }}
+                        <!-- {{ dialogHeader }} --> Created Teams
                     </v-card-title>
 
-                    <v-card-text> {{ dialogText }} </v-card-text>
+                    <v-card-text> {{ dialogText }} 
+                        <div class="table">
+                            <v-data-table v-bind:headers="headers" v-bind:items="teams">
+                                <template slot="items" slot-scope="props">
+                                    <td>{{ props.item.name }}</td>
+                                    <!-- <td>{{ props.item.description }}</td> -->
+                                    <td><v-btn v-on:click="reroute" >status</v-btn></td>
+                                </template>
+                            </v-data-table>
+                        </div>
+                    </v-card-text>
 
                     <v-divider></v-divider>
-
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" flat v-on:click="hideDialog"
-                            >Okay</v-btn
-                        >
+                        <v-btn color="primary" flat v-on:click="hideDialog">Okay</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -65,6 +77,7 @@ export default {
             dialogHeader: "<no dialogHeader>",
             dialogText: "<no dialogText>",
             dialogVisible: false,
+            tableVisible: false,
 
             rules: {
                 required: [
@@ -91,16 +104,31 @@ export default {
                 })
                 .catch(err => this.showDialog("Failed", err));
         },
-        showDialog: function(header, text) {
-            this.dialogHeader = header;
+        //can i make a new funtion here?
+        showTeams: function() {
+            axios
+                .get("/api/teams")
+                .then(response => {
+                    this.teams = response.data.map(team => ({
+                        name: team.name,
+                        // description: team.description,
+                }));
+            });
+        },
+
+        showDialog: function( text) {
+            // this.dialogHeader = header;
             this.dialogText = text;
             this.dialogVisible = true;
+            this.showTeams();
         },
         hideDialog: function() {
             this.dialogVisible = false;
-            // this.$router.push({ name: "home-page" });
+        },
+        reroute: function() {
+            this.$router.push({ name: "home-page" }); 
         }
-    },
+    }
 
 };
 </script>

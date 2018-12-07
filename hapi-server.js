@@ -155,7 +155,7 @@ async function init() {
                 description: "Retrieve all teams"
             },
             handler: async (request, h) => {
-                return knex("teams").select("name", "descrption");
+                return knex("teams").select("name");
             }
         },
         {
