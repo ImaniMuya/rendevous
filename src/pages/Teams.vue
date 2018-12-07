@@ -2,18 +2,25 @@
     <div>
         <h4 class="display-1">Teams</h4>
 
-        <instructions details="Manage your Teams here!" />
+        <instructions details="Create Teams here!" />
 
             <v-text-field
-                v-model="team"
-                v-bind:rules="rules.team"
+                v-model="name"
+                v-bind:rules="rules.required"
                 error-count="10"
                 type="text"
                 label="Team Name"
                 required
-            >
-            </v-text-field>
-            <v-btn v-bind:disabled="!valid" v-on:click="handleSubmit"
+            ></v-text-field>
+            <v-text-field
+                v-model="description"
+                v-bind:rules="rules.required"
+                error-count="10"
+                type="text"
+                label="Description"
+                required
+            ></v-text-field>
+            <v-btn v-on:click="handleSubmit"
                 >Create Team
             </v-btn>
 
@@ -45,15 +52,15 @@ import Instructions from "../components/Instructions.vue";
 import axios from "axios";
 
 export default {
-    name: "SignUpPage",
+    name: "TeamsPage",
     components: {
         Instructions
     },
     data: function() {
         return {
             valid: false,
-            email: "",
-            password: "",
+            name: "",
+            description: "",
 
             dialogHeader: "<no dialogHeader>",
             dialogText: "<no dialogText>",
@@ -62,9 +69,6 @@ export default {
             rules: {
                 required: [
                     val => val.length > 0 || 'Required'
-                ],
-                team: [
-                    val => /^(?![A\s])/.test(val) || "Invalid Team Name"
                 ]
             }
         };
@@ -72,8 +76,9 @@ export default {
     methods: {
         handleSubmit: function() {
             axios
-                .get("/api/teams", {
-                    team: this.team,
+                .post("/api/teams", {
+                    name: this.name,
+                    description: this.description,
                 })
                 .then(result => {
                     if (result.status === 200) {
@@ -93,8 +98,10 @@ export default {
         },
         hideDialog: function() {
             this.dialogVisible = false;
-            this.$router.push({ name: "home-page" });
+            // this.$router.push({ name: "home-page" });
         }
-    }
+    },
+
 };
 </script>
+

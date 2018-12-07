@@ -16,7 +16,7 @@
     const axios = require("axios");
 
     export default {
-        name: "Accounts",
+        name: "Members",
         data: function () {
             return {
                 headers: [
@@ -28,7 +28,7 @@
             };
         },
         mounted: function () {
-            axios.get("/api/accounts").then(response => {
+            axios.get("/api/members").then(response => {
                 this.accounts = response.data.map(account => ({
                     email: account.email,
                     firstName: account.firstname,

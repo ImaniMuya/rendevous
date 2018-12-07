@@ -15,9 +15,11 @@
                 <v-list-tile v-bind:to="{ name: 'notifications' }">
                     <v-list-tile-title>Notifications</v-list-tile-title>
                 </v-list-tile>
-                <v-list-tile v-bind:to="{ name: 'reset-password' }">
-                    <v-list-tile-title>Reset-Password</v-list-tile-title>
+                <v-list-tile v-on:click="SignOut">
+                    <!-- <v-list-tile-title>Reset-Password</v-list-tile-title> -->
+                    <v-list-tile-title>Logout</v-list-tile-title>
                 </v-list-tile>
+                
             </v-list>
         </v-menu>
 
@@ -31,7 +33,8 @@
 
         <v-btn flat v-bind:to="{ name: 'login' }">Login</v-btn>
 
-       
+        <!-- <v-btn v-on:click="fakeSignOut">Fake Sign Out</v-btn> -->
+        <!-- <v-btn v-on:click="fakeSignIn">Fake Sign In</v-btn> -->
 
         <v-menu offset-y>
             <v-btn flat slot="activator">
@@ -47,3 +50,26 @@
         </v-menu>
     </v-toolbar>
 </template>
+
+<script>
+    export default {
+        name: "SignIn",
+        methods: {
+            SignIn: function () {
+                this.$root.currentUser = 'A User';
+            },
+            SignOut: function () {
+                this.$root.currentUser = null;
+            }
+        },
+        computed: {
+            currentUser: function() {
+                if (this.$root.currentUser) {
+                    return this.$root.currentUser;
+                } else {
+                    return "No one logged in";
+                }
+            }
+        }
+    }
+</script>

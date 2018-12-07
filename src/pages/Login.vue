@@ -6,13 +6,27 @@
 
         <v-form v-model="valid">
             <v-text-field
+                v-model="firstName"
+                v-bind:rules="rules.required"
+                label="First name"
+            ></v-text-field>
+            <v-text-field
+                v-model="lastName"
+                v-bind:rules="rules.required"
+                label="Last name"
+            ></v-text-field>
+            <v-text-field
+                v-model="userName"
+                v-bind:rules="rules.required"
+                label="Username"
+            ></v-text-field>
+            <v-text-field
                 v-model="email"
                 v-bind:rules="rules.email"
                 error-count="10"
                 type="email"
                 label="Your email address"
-            >
-            </v-text-field>
+            ></v-text-field>
             <v-text-field
                 v-model="password"
                 v-bind:rules="rules.password"
@@ -23,8 +37,9 @@
             >
             </v-text-field>
             <v-btn v-bind:disabled="!valid" v-on:click="handleSubmit"
-                >Sign Up
+                >Login
             </v-btn>
+            <!-- <v-btn v-on:click="fakeSignIn">Fake Sign In</v-btn> -->
         </v-form>
 
         <div class="text-xs-center">
@@ -47,7 +62,6 @@
                 </v-card>
             </v-dialog>
         </div>
-        <v-btn flat v-bind:to="{ name: 'sign-up' }">I don't have an account</v-btn>
     </div>
 </template>
 
@@ -63,6 +77,9 @@ export default {
     data: function() {
         return {
             valid: false,
+            firstName: "",
+            lastName: "",
+            userName: "",
             email: "",
             password: "",
 
@@ -89,7 +106,10 @@ export default {
     methods: {
         handleSubmit: function() {
             axios
-                .get("/api/accounts", {
+                .post("/api/members", {
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    userName: this.userName,
                     email: this.email,
                     password: this.password,
                 })
@@ -97,6 +117,7 @@ export default {
                     if (result.status === 200) {
                         if (result.data.ok) {
                             this.showDialog("Success", result.data.msge);
+                            this.SignIn();
                         } else {
                             this.showDialog("Sorry", result.data.msge);
                         }
@@ -112,7 +133,14 @@ export default {
         hideDialog: function() {
             this.dialogVisible = false;
             this.$router.push({ name: "home-page" });
+        },
+        SignIn: function () {
+            this.$root.currentUser = this.userName;
+        },
+        SignOut: function () {
+            this.$root.currentUser = null;
         }
-    }
+    },
+
 };
 </script>
